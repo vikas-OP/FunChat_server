@@ -6,7 +6,7 @@ async function formatWelcomingMessage(userName, roomID) {
   return {
     sentBy: `DayBot`,
     message: `Welcome ${userName}, let's FunChat`,
-    time: moment().format("h:mm a"),
+    time: moment().utcOffset("+05:30").format("h:mm a"),
     users,
   }
 }
@@ -16,7 +16,7 @@ async function formatUserJoiningMessage(userName, roomID) {
   return {
     sentBy: `DayBot`,
     message: `${userName} has joined the party`,
-    time: moment().format("h:mm a"),
+    time: moment().utcOffset("+05:30").format("h:mm a"),
     users,
   }
 }
@@ -25,7 +25,7 @@ function formatClientMessage(message) {
   return {
     sentBy: `You`,
     message,
-    time: moment().format("h:mm a"),
+    time: moment().utcOffset("+05:30").format("h:mm a"),
   }
 }
 
@@ -33,7 +33,7 @@ function formatMessageForOthers(userName, message) {
   return {
     sentBy: userName,
     message,
-    time: moment().format("h:mm a"),
+    time: moment().utcOffset("+05:30").format("h:mm a"),
   }
 }
 
@@ -42,7 +42,7 @@ async function formatUserLeavingMessage(userName, roomID) {
   return {
     sentBy: `DayBot`,
     message: `${userName} has left the chat`,
-    time: moment().format("h:mm a"),
+    time: moment().utcOffset("+05:30").format("h:mm a"),
     users,
   }
 }
