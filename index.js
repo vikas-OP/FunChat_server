@@ -12,6 +12,7 @@ const forgotPassword = require("./routes/Passwords/forgotPassword")
 const resetPassword = require("./routes/Passwords/resetPassword")
 const home = require("./routes/App/home")
 const rooms = require("./routes/api/rooms")
+const users = require("./routes/api/users")
 const { connectToDB } = require("./common/functions")
 const { addUserToRoom, removeUserFromRoom } = require("./common/rooms")
 const {
@@ -29,14 +30,13 @@ const server = http.createServer(app)
 const io = socketio(server)
 
 io.use(async (socket, next) => {
-  checkRoomCredentials(socket)
-    .then((result) => {
-      socket.details = { ...result }
-      next()
-    })
-    .catch((err) => {
-      next(err)
-    })
+  try {
+    let result = await checkRoomCredentials(socket)
+    socket.details = result
+    next()
+  } catch (err) {
+    next(err)
+  }
 }).on("connection", (socket) => {
   socket.on("join_room", async (roomID) => {
     socket.join(roomID)
@@ -83,25 +83,9 @@ app.use("/forgot-password", forgotPassword)
 app.use("/reset-password", resetPassword)
 app.use("/home", home)
 app.use("/api/rooms", rooms)
+app.use("/api/users", users)
 
 server.listen(PORT, () => console.log("server started"))
-
-// use((socket, next) => {
-//   if (socket.handshake.query && socket.handshake.query.token) {
-//     verifyToken(socket.handshake.query.token, socket, next)
-//   }
-//   next(new Error("Authentication error"))
-// })
-
-function verifyToken(token, socket, next) {
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decode) => {
-    if (err) {
-      return next(err)
-    }
-    socket.decode = decode
-    next()
-  })
-}
 
 async function checkRoomCredentials(socket) {
   try {
