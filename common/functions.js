@@ -68,7 +68,7 @@ function sendPasswordResetMail(email, randomString) {
 }
 
 function sendMail(email, randomString, subject, text) {
-  const randomUrl = `http://localhost:3000/${randomString}`
+  const randomUrl = `https://vikas-funchat.netlify.app/${randomString}`
   let transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
